@@ -23,7 +23,7 @@ SPDX-License-Identifier: 0BSD
   <input type="hidden" name="tries" value="">
 </form>
 <div id="progress"><span id="progressText"></span><div id="progressBar"></div></div>
-<iframe name="post"></iframe>
+<iframe srcdoc="" src="about:blank" name="post"></iframe>
 <script>
   "use strict";
 
@@ -88,7 +88,7 @@ SPDX-License-Identifier: 0BSD
     form.submit();
   }
 
-  startChallenge(document.forms.challenge);
+  window.addEventListener("load", _ => startChallenge(document.forms.challenge));
 </script>
 <noscript>AI scrapers break the web, to use this page you'll need JavaScript enabled.</noscript>
 <footer>protected by <a href="https://d.cx/haphash" target="_new">haphash</a></footer>
