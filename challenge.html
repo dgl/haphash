@@ -1,0 +1,94 @@
+<!DOCTYPE html><!--
+Copyright © 2025 David Leadbeater <https://🖐.st>
+SPDX-License-Identifier: 0BSD
+-->
+<title>I Challenge Thee</title>
+<style>
+  body { background: #ddd; color: #000; }
+  #progress { position: absolute; top: 50%%; width: 100%%; transform: translateY(-50%%);
+    text-align: center; font-size: 125%%; }
+  #progressBar { font-size: 250%%; user-select: none; }
+  #progressBar.done { transition: font-size 2s linear, opacity 2s linear; font-size: 1000%%; opacity: 0.5; }
+  .animate { animation: spin 2s infinite linear; }
+  @keyframes spin {
+    to { transform:rotate(360deg); }
+  }
+  iframe { display: none; }
+  footer { position: fixed; bottom: 4px; width: 100%%; text-align: center; }
+</style>
+<form method="post" target="post" action="/_challenge" name="challenge">
+  <input type="hidden" name="ip" value="%[src]">
+  <input type="hidden" name="ts" value="%[date]">
+  <input type="hidden" name="diff" value="4">
+  <input type="hidden" name="tries" value="">
+</form>
+<div id="progress"><span id="progressText"></span><div id="progressBar"></div></div>
+<iframe name="post"></iframe>
+<script>
+  "use strict";
+
+  async function challenge(diff, ip, ts) {
+    let te = new TextEncoder;
+    let tries = 0;
+    progressText.innerText = "✋ Checking connection, please wait";
+    progressBar.innerText = '🌀';
+    progressBar.className = 'animate';
+    for (; tries < 10_000_000; tries++) {
+      let hash = await crypto.subtle.digest("SHA-256", te.encode([ip,location.hostname,ts,tries].join(";")));
+      let y = new Uint8Array(hash);
+      let i = 0;
+      while(i < diff/2) {
+        if (y[i]>0x0F) break;
+        if ((i*2)+1 >= diff) return tries;
+        if (y[i++] > 0) break;
+        if ((i*2) >= diff) return tries;
+      }
+    }
+  }
+
+  async function startChallenge(form) {
+    if (!('subtle' in window.crypto)) {
+      if (location.protocol !== 'https:') {
+        progress.innerText = 'No WebCrypto support. This must be served over a HTTPS connection.';
+      } else {
+        progress.innerText = 'No WebCrypto support in your browser. ' +
+          'This is required to pass the challenge.';
+      }
+      return;
+    }
+
+    let backoff = 0;
+    let tryOnce = _ => {
+      if (backoff > 8) {
+        progressText.innerText = 'Failed to submit after several tries. Try reloading.';
+        return;
+      }
+      setTimeout(async _ => submitAnswer(form), 1000*(Math.pow(2, backoff++)-1));
+    };
+    form.addEventListener("error", tryOnce);
+    let iframe = document.querySelector("iframe");
+    iframe.addEventListener("load", _ => location.hash.length ? location.reload() : location.replace(location));
+    tryOnce();
+  }
+
+  async function submitAnswer(form) {
+    let start = new Date;
+    let tries = await challenge(form.diff.value, form.ip.value, form.ts.value);
+    if (tries === undefined) {
+      progressText.innerText = 'Unable to calculate challenge. Try reloading or a different browser.';
+      progressBar.innerText = '🤯';
+      progressBar.className = 'error';
+      return;
+    }
+    form.tries.value = tries;
+    progressText.innerText = 'Took ' + (new Date - start) + 'ms';
+    console.log(`${tries} tries.\n${progressText.innerText}`);
+    progressBar.className = 'done';
+    progressBar.innerText = '✅';
+    form.submit();
+  }
+
+  startChallenge(document.forms.challenge);
+</script>
+<noscript>AI scrapers break the web, to use this page you'll need JavaScript enabled.</noscript>
+<footer>protected by <a href="https://d.cx/haphash" target="_new">haphash</a></footer>
