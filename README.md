@@ -77,6 +77,7 @@ The difficulty is set in both the HTML and the haproxy config, it defaults to 4
 * [haproxy enterprise](https://www.haproxy.com/documentation/haproxy-configuration-tutorials/security/enterprise-features/)
 * [tedu's anticrawl](https://flak.tedunangst.com/post/anticrawl)
 * [anubis](https://anubis.techaro.lol/)
+* [go-away](https://git.gammaspectra.live/git/go-away)
 
 ## Credits
 
