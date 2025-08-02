@@ -69,7 +69,7 @@ The difficulty is set in both the HTML and the haproxy config, it defaults to 4
 
 ## License
 
-©[David Leadbeater](https://🖐.st) 2025; [0BSD](https://dgl.cx/0bsd), see
+©[David Leadbeater](https://一.st) 2025; [0BSD](https://dgl.cx/0bsd), see
 [COPYING](COPYING).
 
 ## Alternatives
