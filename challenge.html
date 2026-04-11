@@ -19,7 +19,7 @@ SPDX-License-Identifier: 0BSD
 <form method="post" target="post" action="/_challenge" name="challenge">
   <input type="hidden" name="ip" value="%[src]">
   <input type="hidden" name="ts" value="%[date]">
-  <input type="hidden" name="diff" value="4">
+  <input type="hidden" name="diff" value="%[var(txn.diff)]">
   <input type="hidden" name="tries" value="">
 </form>
 <div id="progress"><span id="progressText"></span><div id="progressBar"></div></div>
