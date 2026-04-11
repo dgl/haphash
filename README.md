@@ -64,8 +64,8 @@ Restarting haproxy will clear the stick table (configure
 [peers](https://www.haproxy.com/documentation/haproxy-configuration-tutorials/proxying-essentials/custom-rules/stick-tables/#synchronize-stick-tables-across-peers)
 to make the allowed IP addresses persist).
 
-The difficulty is set in both the HTML and the haproxy config, it defaults to 4
-(which is pretty fast).
+The difficulty is set in the haproxy config, it defaults to 4 (which is pretty
+fast).
 
 ## License
 
